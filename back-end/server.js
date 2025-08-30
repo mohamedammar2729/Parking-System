@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const WebSocket = require('ws');
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 const BASE = '/api/v1';
 
 const app = express();
