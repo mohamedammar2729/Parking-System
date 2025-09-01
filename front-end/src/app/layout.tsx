@@ -17,8 +17,8 @@ export default function RootLayout({
     <html lang='en'>
       <body>
         <Providers>
-          <div className='fixed top-6 right-6 z-50'>
-            <WebSocketStatus />
+          <div className='fixed top-5 right-6 z-50'>
+           
           </div>
           <main>{children}</main>
         </Providers>

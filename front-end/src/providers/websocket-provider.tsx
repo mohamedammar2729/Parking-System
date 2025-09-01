@@ -1,18 +1,15 @@
 "use client";
 
-import { connectWebSocket, disconnectWebSocket } from "@/web-sockets/client";
+import { connectWebSocket } from "@/web-sockets/client";
 import { useEffect } from "react";
-
 
 export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Initialize WebSocket connection on app start
     connectWebSocket();
 
-    return () => {
-      // Clean up on app unmount
-      disconnectWebSocket();
-    };
+    // Don't disconnect on unmount since we want persistent connection
+    // The connection should only be closed when the user closes the browser/tab
   }, []);
 
   return <>{children}</>;

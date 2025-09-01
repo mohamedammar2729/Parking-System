@@ -12,7 +12,6 @@ import {
   Car,
   Settings,
   Clock,
-  Building2,
   Shield,
   Activity,
   BarChart3,
