@@ -17,16 +17,22 @@ import {
   Activity,
   BarChart3,
 } from "lucide-react";
+import Image from "next/image";
 
 const HomeView = () => {
   return (
-    <div className='min-h-screen bg-gradient-to-br from-background via-background to-muted'>
-      <div className='container mx-auto px-4 py-12'>
+    <div className='min-h-screen'>
+      {/* Add padding top to account for fixed header */}
+      <div className='pt-16 mx-auto px-4 pb-12'>
         <div className='text-center mb-16'>
           <div className='flex items-center justify-center mb-6'>
-            <div className='flex aspect-square size-16 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg'>
-              <Building2 className='h-8 w-8' />
-            </div>
+            <Image
+              src='/welink-cargo-logo.png'
+              width={200}
+              height={200}
+              alt='WeLink Cargo'
+              className='object-cover'
+            />
           </div>
           <h1 className='text-5xl font-bold text-foreground mb-6 text-balance'>
             WeLink Cargo
@@ -34,11 +40,6 @@ const HomeView = () => {
               Parking Management System
             </span>
           </h1>
-          <p className='text-xl text-muted-foreground max-w-3xl mx-auto text-pretty'>
-            Enterprise-grade parking reservation and management platform
-            designed for efficient vehicle access control and comprehensive
-            business operations
-          </p>
           <div className='flex items-center justify-center gap-2 mt-6'>
             <Badge variant='secondary' className='text-sm'>
               <Activity className='mr-1 h-3 w-3' />
@@ -55,15 +56,13 @@ const HomeView = () => {
           </div>
         </div>
 
-        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16'>
-          <Card className='hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-card/50 backdrop-blur'>
-            <CardHeader className='pb-4'>
-              <div className='flex items-center gap-3 mb-2'>
-                <div className='flex aspect-square size-10 items-center justify-center rounded-lg bg-primary/10 text-primary'>
-                  <Car className='h-5 w-5' />
-                </div>
-                <CardTitle className='text-xl'>Gate Access System</CardTitle>
+        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'>
+          <Card className='group hover:shadow-xl transition-all duration-300'>
+            <CardHeader className='text-center pb-4'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-colors'>
+                <Car className='h-8 w-8' />
               </div>
+              <CardTitle className='text-xl'>Gate Access System</CardTitle>
               <CardDescription className='text-base'>
                 Streamlined check-in process for visitors and subscribers with
                 real-time availability
@@ -82,14 +81,12 @@ const HomeView = () => {
             </CardContent>
           </Card>
 
-          <Card className='hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-card/50 backdrop-blur'>
-            <CardHeader className='pb-4'>
-              <div className='flex items-center gap-3 mb-2'>
-                <div className='flex aspect-square size-10 items-center justify-center rounded-lg bg-accent/10 text-accent'>
-                  <Clock className='h-5 w-5' />
-                </div>
-                <CardTitle className='text-xl'>Employee Checkpoint</CardTitle>
+          <Card className='group hover:shadow-xl transition-all duration-300'>
+            <CardHeader className='text-center pb-4'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary/10 group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors'>
+                <Clock className='h-8 w-8' />
               </div>
+              <CardTitle className='text-xl'>Employee Checkpoint</CardTitle>
               <CardDescription className='text-base'>
                 Professional checkout and payment processing for employee
                 operations
@@ -113,14 +110,12 @@ const HomeView = () => {
             </CardContent>
           </Card>
 
-          <Card className='hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-card/50 backdrop-blur md:col-span-2 lg:col-span-1'>
-            <CardHeader className='pb-4'>
-              <div className='flex items-center gap-3 mb-2'>
-                <div className='flex aspect-square size-10 items-center justify-center rounded-lg bg-destructive/10 text-destructive'>
-                  <Settings className='h-5 w-5' />
-                </div>
-                <CardTitle className='text-xl'>Admin Dashboard</CardTitle>
+          <Card className='group hover:shadow-xl transition-all duration-300 '>
+            <CardHeader className='text-center pb-4'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-chart-4/10 group-hover:bg-chart-4 group-hover:text-white transition-colors'>
+                <Settings className='h-8 w-8' />
               </div>
+              <CardTitle className='text-xl'>Admin Dashboard</CardTitle>
               <CardDescription className='text-base'>
                 Comprehensive system management with advanced analytics and
                 reporting
@@ -143,47 +138,6 @@ const HomeView = () => {
               </Button>
             </CardContent>
           </Card>
-        </div>
-
-        <div className='bg-card/30 backdrop-blur rounded-2xl p-12 max-w-6xl mx-auto shadow-lg'>
-          <div className='text-center mb-12'>
-            <h2 className='text-3xl font-bold mb-4'>Enterprise Features</h2>
-            <p className='text-muted-foreground text-lg'>
-              Built for scale, designed for efficiency
-            </p>
-          </div>
-          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
-            <div className='text-center'>
-              <div className='flex aspect-square size-12 items-center justify-center rounded-lg bg-primary/10 text-primary mx-auto mb-4'>
-                <Activity className='h-6 w-6' />
-              </div>
-              <h3 className='font-semibold mb-3'>Real-time Updates</h3>
-              <p className='text-sm text-muted-foreground'>
-                Live availability tracking with WebSocket connections for
-                instant updates across all interfaces
-              </p>
-            </div>
-            <div className='text-center'>
-              <div className='flex aspect-square size-12 items-center justify-center rounded-lg bg-accent/10 text-accent mx-auto mb-4'>
-                <Shield className='h-6 w-6' />
-              </div>
-              <h3 className='font-semibold mb-3'>Multi-user Support</h3>
-              <p className='text-sm text-muted-foreground'>
-                Role-based access control with separate interfaces for visitors,
-                subscribers, employees, and administrators
-              </p>
-            </div>
-            <div className='text-center'>
-              <div className='flex aspect-square size-12 items-center justify-center rounded-lg bg-chart-4/10 text-chart-4 mx-auto mb-4'>
-                <BarChart3 className='h-6 w-6' />
-              </div>
-              <h3 className='font-semibold mb-3'>Smart Pricing</h3>
-              <p className='text-sm text-muted-foreground'>
-                Dynamic rate calculation based on rush hours, vacation periods,
-                and category-specific pricing
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
