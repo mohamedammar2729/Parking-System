@@ -1,79 +1,102 @@
+/**
+ * Simple WebSocketconst WS_URL =
+  process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4000/api/v1/ws";
+const MAX_RETRY_ATTEMPTS = 3;
+
+let ws: WebSocket | null = null;
+let reconnectTimeout: NodeJS.Timeout | null = null;
+let isConnecting = false;
+let intentionalDisconnect = false;
+let retryAttempts = 0;
+const subscribedGates = new Set<string>(); // Track subscribed gatesr Parking System
+ *
+ * Features:
+ * - Auto-connects on app start
+ * - Auto-reconnects on connection loss (3 attempts max)
+ * - Subscribes/unsubscribes to gate updates
+ * - Handles zone-update and admin-update messages
+ * - Shows connection status notifications
+ *
+ * Backend WebSocket Messages:
+ * - Send: {"type": "subscribe", "payload": {"gateId": "gate_1"}}
+ * - Send: {"type": "unsubscribe", "payload": {"gateId": "gate_1"}}
+ * - Receive: {"type": "zone-update", "payload": {...zoneData}}
+ * - Receive: {"type": "admin-update", "payload": {...adminAction}}
+ */
 import { store } from "@/redux/store";
 import {
   setConnected,
-  setConnecting,
-  setLastMessage,
   setConnectionStatus,
+  setLastMessage,
 } from "@/redux/web-sockets/websocket-slice";
 import { toast } from "sonner";
 
 const WS_URL =
   process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4000/api/v1/ws";
+const MAX_RETRY_ATTEMPTS = 3;
 
 let ws: WebSocket | null = null;
-let reconnectAttempts = 0;
-const baseReconnectDelay = 2000;
-const maxReconnectDelay = 30000; // 30 seconds max delay
-let isConnecting = false;
-let mockMode = false;
 let reconnectTimeout: NodeJS.Timeout | null = null;
+let isConnecting = false;
 let intentionalDisconnect = false;
-let lastConnectionState = "disconnected"; // Track last connection state for toast logic
+let retryAttempts = 0;
+const subscribedGates = new Set<string>(); // Track subscribed gates
 
 export const connectWebSocket = () => {
+  // Prevent multiple connection attempts
   if (isConnecting || (ws && ws.readyState === WebSocket.CONNECTING)) {
+    console.log("WebSocket connection already in progress");
     return;
   }
 
+  // If already connected, don't reconnect
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    console.log("WebSocket already connected");
+    return;
+  }
+
+  // Check if WebSocket is supported
   if (typeof WebSocket === "undefined") {
     console.warn("WebSocket not supported in this environment");
-    enableMockMode();
     return;
   }
 
   try {
     isConnecting = true;
     intentionalDisconnect = false;
-    store.dispatch(setConnecting(true));
     store.dispatch(setConnectionStatus("connecting"));
-    console.log("Attempting WebSocket connection to:", WS_URL);
+
     ws = new WebSocket(WS_URL);
 
-    const connectionTimeout = setTimeout(() => {
-      if (ws && ws.readyState === WebSocket.CONNECTING) {
-        console.warn("WebSocket connection timeout");
-        ws.close();
-        handleConnectionFailure();
-      }
-    }, 10000); // 10 second connection timeout
-
     ws.onopen = () => {
-      clearTimeout(connectionTimeout);
-      console.log("WebSocket connected successfully");
-      reconnectAttempts = 0;
       isConnecting = false;
-      mockMode = false;
+      retryAttempts = 0; // Reset retry attempts on successful connection
+
+      // Dispatch Redux state updates
       store.dispatch(setConnected(true));
-      store.dispatch(setConnecting(false));
       store.dispatch(setConnectionStatus("connected"));
 
-      // Show toast only when transitioning from disconnected to connected
-      if (
-        lastConnectionState === "disconnected" ||
-        lastConnectionState === "error"
-      ) {
-        toast.success("Connected to server");
-      }
-      lastConnectionState = "connected";
+      console.log("WebSocket connected successfully");
+
+      // Resubscribe to all gates that were previously subscribed
+      // Add a small delay to ensure the connection is fully established
+      setTimeout(() => {
+        const gatesToResubscribe = Array.from(subscribedGates);
+        subscribedGates.clear(); // Clear to avoid duplicate subscriptions
+
+        gatesToResubscribe.forEach((gateId) => {
+          console.log(`Resubscribing to gate: ${gateId}`);
+          subscribeToGate(gateId);
+        });
+      }, 100);
     };
 
     ws.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
-        console.log("WebSocket message received:", message);
         store.dispatch(setLastMessage(message));
 
-        // Show toast for important admin messages only
+        // Show admin update notifications
         if (message.type === "admin-update") {
           const { action, targetType, targetId } = message.payload;
           toast.info(`Admin update: ${action} on ${targetType} ${targetId}`);
@@ -83,175 +106,131 @@ export const connectWebSocket = () => {
       }
     };
 
-    ws.onclose = (event) => {
-      clearTimeout(connectionTimeout);
-      console.log("WebSocket disconnected", {
-        code: event.code,
-        reason: event.reason,
-      });
-
+    ws.onclose = () => {
       isConnecting = false;
       store.dispatch(setConnected(false));
-      store.dispatch(setConnecting(false));
 
       if (intentionalDisconnect) {
         store.dispatch(setConnectionStatus("disconnected"));
         console.log("WebSocket disconnected intentionally");
-        // Show toast only when intentionally disconnecting from a connected state
-        if (lastConnectionState === "connected") {
-          toast.info("Disconnected from server");
-        }
-        lastConnectionState = "disconnected";
+        return;
+      }
+
+      // Check if we've exceeded max retry attempts
+      if (retryAttempts >= MAX_RETRY_ATTEMPTS) {
+        store.dispatch(setConnectionStatus("error"));
+        console.log("Max retry attempts reached. Connection failed.");
+        toast.error("Refresh page to update/check the server connection");
         return;
       }
 
       store.dispatch(setConnectionStatus("connecting"));
+      retryAttempts++;
+      console.log(
+        `WebSocket disconnected, attempting to reconnect... (${retryAttempts}/${MAX_RETRY_ATTEMPTS})`
+      );
 
-      // Show toast only when transitioning from connected to disconnected
-      if (lastConnectionState === "connected") {
-        toast.warning("Connection lost. Reconnecting...");
-      }
-      lastConnectionState = "connecting";
-
-      // Always attempt to reconnect with exponential backoff
-      attemptReconnect();
+      // Auto-reconnect after 3 seconds
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      reconnectTimeout = setTimeout(() => {
+        connectWebSocket();
+      }, 3000);
     };
 
     ws.onerror = (error) => {
-      clearTimeout(connectionTimeout);
-      console.warn("WebSocket connection error:", error);
-      // Don't set error status, just let the onclose handle reconnection
+      console.error("WebSocket error:", error);
+      isConnecting = false;
+      store.dispatch(setConnectionStatus("error"));
+      // No toast for errors - user will see connection status
     };
   } catch (error) {
     console.error("Failed to create WebSocket connection:", error);
     isConnecting = false;
-    store.dispatch(setConnecting(false));
-    handleConnectionFailure();
+    store.dispatch(setConnectionStatus("error"));
+    // No toast for errors - user will see connection status
   }
-};
-
-const handleConnectionFailure = () => {
-  // Don't set error status, just keep trying to reconnect
-  store.dispatch(setConnectionStatus("connecting"));
-  isConnecting = false;
-  store.dispatch(setConnecting(false));
-
-  // Show toast only when transitioning from connected to error state
-  if (lastConnectionState === "connected") {
-    toast.warning("Connection lost. Reconnecting...");
-  }
-  lastConnectionState = "connecting";
-
-  attemptReconnect();
-};
-
-const enableMockMode = () => {
-  mockMode = true;
-  isConnecting = false;
-  console.log("WebSocket mock mode enabled - simulating connection for demo");
-
-  // Simulate successful connection
-  store.dispatch(setConnected(true));
-  store.dispatch(setConnectionStatus("connected"));
-
-  // Show toast only when transitioning to connected state
-  if (
-    lastConnectionState === "disconnected" ||
-    lastConnectionState === "error"
-  ) {
-    toast.info("Demo mode activated - using simulated data");
-  }
-  lastConnectionState = "connected";
-
-  // Simulate periodic updates
-  startMockUpdates();
-};
-
-const startMockUpdates = () => {
-  if (!mockMode) return;
-
-  setInterval(() => {
-    if (mockMode) {
-      const mockMessage = {
-        type: "zone-update",
-        payload: {
-          zoneId: "zone-1",
-          availableSpots: Math.floor(Math.random() * 50) + 10,
-          timestamp: new Date().toISOString(),
-        },
-      };
-      store.dispatch(setLastMessage(mockMessage));
-    }
-  }, 10000);
-};
-
-const attemptReconnect = () => {
-  if (isConnecting || intentionalDisconnect || mockMode) {
-    return;
-  }
-
-  // Exponential backoff with jitter
-  const delay =
-    Math.min(
-      baseReconnectDelay * Math.pow(1.5, reconnectAttempts),
-      maxReconnectDelay
-    ) +
-    Math.random() * 1000; // Add jitter to avoid thundering herd
-
-  reconnectAttempts++;
-
-  console.log(
-    `Attempting to reconnect WebSocket in ${Math.round(
-      delay / 1000
-    )}s (attempt ${reconnectAttempts})`
-  );
-
-  reconnectTimeout = setTimeout(() => {
-    connectWebSocket();
-  }, delay);
 };
 
 export const subscribeToGate = (gateId: string) => {
-  if (mockMode) {
-    console.log("Mock: Subscribed to gate:", gateId);
+  if (!gateId) {
+    console.warn("subscribeToGate: No gateId provided");
     return;
   }
 
-  if (ws && ws.readyState === WebSocket.OPEN) {
+  // Check if WebSocket exists and is in the correct state
+  if (!ws) {
+    console.warn("subscribeToGate: WebSocket instance not found");
+    return;
+  }
+
+  if (ws.readyState !== WebSocket.OPEN) {
+    console.warn(
+      `subscribeToGate: WebSocket not ready (state: ${ws.readyState})`
+    );
+    return;
+  }
+
+  // Don't subscribe if already subscribed
+  if (subscribedGates.has(gateId)) {
+    console.log(`Already subscribed to gate: ${gateId}`);
+    return;
+  }
+
+  try {
     const message = {
       type: "subscribe",
       payload: { gateId },
     };
     ws.send(JSON.stringify(message));
-    console.log("Subscribed to gate:", gateId);
-  } else {
-    console.warn("Cannot subscribe - WebSocket not connected");
+    subscribedGates.add(gateId);
+    console.log(`Successfully subscribed to gate: ${gateId}`);
+  } catch (error) {
+    console.error("Failed to subscribe to gate:", error);
   }
 };
 
 export const unsubscribeFromGate = (gateId: string) => {
-  if (mockMode) {
-    console.log("Mock: Unsubscribed from gate:", gateId);
+  if (!gateId) {
+    console.warn("unsubscribeFromGate: No gateId provided");
     return;
   }
 
-  if (ws && ws.readyState === WebSocket.OPEN) {
+  // Always remove from tracking, even if WebSocket is not connected
+  const wasSubscribed = subscribedGates.has(gateId);
+  subscribedGates.delete(gateId);
+
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    if (wasSubscribed) {
+      console.log(
+        `Removed gate ${gateId} from tracking (WebSocket not connected)`
+      );
+    }
+    return;
+  }
+
+  if (!wasSubscribed) {
+    console.log(`Not subscribed to gate: ${gateId}`);
+    return;
+  }
+
+  try {
     const message = {
       type: "unsubscribe",
       payload: { gateId },
     };
     ws.send(JSON.stringify(message));
-    console.log("Unsubscribed from gate:", gateId);
-  } else {
-    console.warn("Cannot unsubscribe - WebSocket not connected");
+    console.log(`Successfully unsubscribed from gate: ${gateId}`);
+  } catch (error) {
+    console.error("Failed to unsubscribe from gate:", error);
   }
 };
 
 export const disconnectWebSocket = () => {
   intentionalDisconnect = true;
+  retryAttempts = 0; // Reset retry attempts on intentional disconnect
 
   if (ws) {
-    ws.close(1000, "Client disconnect");
+    ws.close();
     ws = null;
   }
 
@@ -260,19 +239,39 @@ export const disconnectWebSocket = () => {
     reconnectTimeout = null;
   }
 
+  // Clear subscribed gates on intentional disconnect
+  subscribedGates.clear();
+
   isConnecting = false;
-  reconnectAttempts = 0;
-  mockMode = false;
   store.dispatch(setConnected(false));
   store.dispatch(setConnectionStatus("disconnected"));
-  console.log("WebSocket disconnected by client");
+  console.log("WebSocket disconnected intentionally");
 };
 
 export const isWebSocketConnected = (): boolean => {
-  return mockMode || (ws !== null && ws.readyState === WebSocket.OPEN);
+  return ws !== null && ws.readyState === WebSocket.OPEN;
 };
 
-// Export the WebSocket instance for external access if needed
+export const isWebSocketReadyForSubscriptions = (): boolean => {
+  return ws !== null && ws.readyState === WebSocket.OPEN && !isConnecting;
+};
+
 export const getWebSocketInstance = (): WebSocket | null => {
   return ws;
+};
+
+export const getWebSocketState = () => {
+  return {
+    isConnected: isWebSocketConnected(),
+    readyState: ws?.readyState,
+    subscribedGates: Array.from(subscribedGates),
+    isConnecting,
+    retryAttempts,
+  };
+};
+
+export const retryConnection = () => {
+  retryAttempts = 0; // Reset retry attempts
+  intentionalDisconnect = false;
+  connectWebSocket();
 };
