@@ -1,11 +1,12 @@
 "use client";
 
 import type React from "react";
-
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { store } from "@/redux/store";
 import { useState } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { WebSocketProvider } from "./websocket-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -22,7 +23,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <WebSocketProvider>
+          {children}
+          <Toaster />
+        </WebSocketProvider>
+      </QueryClientProvider>
     </Provider>
   );
 }

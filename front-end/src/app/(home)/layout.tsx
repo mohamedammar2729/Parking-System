@@ -5,13 +5,7 @@ interface Props {
 }
 
 const Layout = ({ children }: Props) => {
-  return (
-    <SidebarProvider>
-      <main className='flex flex-col w-screen h-screen bg-muted'>
-        {children}
-      </main>
-    </SidebarProvider>
-  );
+  return <div>{children}</div>;
 };
 
 export default Layout;
