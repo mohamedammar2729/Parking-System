@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "../providers/all-provider";
-import { WebSocketStatus } from "@/components/connection-status";
 
 export const metadata: Metadata = {
   title: "Parking Reservation System",
