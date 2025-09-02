@@ -94,12 +94,15 @@ export const connectWebSocket = () => {
     ws.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
+
+        // Dispatch to Redux store so components can react
         store.dispatch(setLastMessage(message));
 
-        // Show admin update notifications
-        if (message.type === "admin-update") {
-          const { action, targetType, targetId } = message.payload;
-          toast.info(`Admin update: ${action} on ${targetType} ${targetId}`);
+        // Handle specific message types
+        if (message.type === "zone-update") {
+          console.log("Zone update received:", message.payload);
+        } else if (message.type === "admin-update") {
+          console.log("Admin update received:", message.payload);
         }
       } catch (error) {
         console.error("Failed to parse WebSocket message:", error);

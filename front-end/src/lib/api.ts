@@ -11,7 +11,7 @@ import {
 } from "@/server/services";
 import { useEffect } from "react";
 import { setAuthToken } from "@/server/client";
-import type { CheckinRequest, CheckoutRequest } from "@/server/types";
+import type { CheckinRequest, CheckoutRequest, Category } from "@/server/types";
 
 export const useApiToken = () => {
   const token = useAppSelector((state) => state.auth.token);
@@ -79,5 +79,46 @@ export const useParkingState = () => {
     queryKey: ["parking-state"],
     queryFn: adminService.getParkingState,
     refetchInterval: 30000, // Refresh every 30 seconds
+  });
+};
+
+export const useCategories = () => {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: adminService.getCategories,
+  });
+};
+
+export const useUpdateCategory = () => {
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<Category> }) =>
+      adminService.updateCategory(id, data),
+  });
+};
+
+export const useUpdateZoneStatus = () => {
+  return useMutation({
+    mutationFn: ({ id, open }: { id: string; open: boolean }) =>
+      adminService.updateZoneStatus(id, open),
+  });
+};
+
+export const useCreateRushHour = () => {
+  return useMutation({
+    mutationFn: adminService.createRushHour,
+  });
+};
+
+export const useCreateVacation = () => {
+  return useMutation({
+    mutationFn: adminService.createVacation,
+  });
+};
+
+export const useAllSubscriptions = () => {
+  return useQuery({
+    queryKey: ["admin-subscriptions"],
+    queryFn: adminService.getSubscriptions,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };

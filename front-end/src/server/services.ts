@@ -10,6 +10,7 @@ import type {
   CheckoutRequest,
   CheckoutResponse,
   ParkingStateReport,
+  Category,
 } from "./types";
 
 export const authService = {
@@ -39,4 +40,14 @@ export const ticketService = {
 export const adminService = {
   getParkingState: () =>
     apiClient.get<ParkingStateReport[]>("/admin/reports/parking-state"),
+  getCategories: () => apiClient.get<Category[]>("/master/categories"),
+  updateCategory: (id: string, data: Partial<Category>) =>
+    apiClient.put<Category>(`/admin/categories/${id}`, data),
+  updateZoneStatus: (id: string, open: boolean) =>
+    apiClient.put(`/admin/zones/${id}/open`, { open }),
+  createRushHour: (data: { weekDay: number; from: string; to: string }) =>
+    apiClient.post("/admin/rush-hours", data),
+  createVacation: (data: { name: string; from: string; to: string }) =>
+    apiClient.post("/admin/vacations", data),
+  getSubscriptions: () => apiClient.get<Subscription[]>("/admin/subscriptions"),
 };
