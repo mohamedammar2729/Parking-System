@@ -4,7 +4,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Wifi, WifiOff, RefreshCw, AlertCircle } from "lucide-react";
-import { retryConnection } from "@/web-sockets/client";
+import { retryConnection } from "@/web-sockets/polling-client";
 
 export const WebSocketStatus = () => {
   const { connectionStatus } = useAppSelector((state) => state.websocket);
@@ -62,7 +62,10 @@ export const WebSocketStatus = () => {
   }
 
   return (
-    <Badge variant={currentStatus.variant} className='flex text-md items-center gap-1'>
+    <Badge
+      variant={currentStatus.variant}
+      className='flex text-md items-center gap-1'
+    >
       {currentStatus.icon}
       {currentStatus.label}
     </Badge>

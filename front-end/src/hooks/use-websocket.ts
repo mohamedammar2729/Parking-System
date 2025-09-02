@@ -6,7 +6,7 @@ import {
   isWebSocketReadyForSubscriptions,
   subscribeToGate,
   unsubscribeFromGate,
-} from "@/web-sockets/client";
+} from "@/web-sockets/polling-client";
 
 export const useWebSocket = (gateId?: string) => {
   const connectionStatus = useAppSelector(
