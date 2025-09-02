@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "sonner";
 
+// Use Next.js environment variables with fallback for development
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE || "http://localhost:4000/api/v1";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
 let authToken: string | null = null;
 

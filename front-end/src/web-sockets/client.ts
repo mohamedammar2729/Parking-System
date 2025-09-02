@@ -1,14 +1,5 @@
 /**
- * Simple WebSocketconst WS_URL =
-  process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4000/api/v1/ws";
-const MAX_RETRY_ATTEMPTS = 3;
-
-let ws: WebSocket | null = null;
-let reconnectTimeout: NodeJS.Timeout | null = null;
-let isConnecting = false;
-let intentionalDisconnect = false;
-let retryAttempts = 0;
-const subscribedGates = new Set<string>(); // Track subscribed gatesr Parking System
+ * Simple WebSocket client for Parking System
  *
  * Features:
  * - Auto-connects on app start
@@ -31,6 +22,7 @@ import {
 } from "@/redux/web-sockets/websocket-slice";
 import { toast } from "sonner";
 
+// Use Next.js environment variables with fallback for development
 const WS_URL =
   process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4000/api/v1/ws";
 const MAX_RETRY_ATTEMPTS = 3;
