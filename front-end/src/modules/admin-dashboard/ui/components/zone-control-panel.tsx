@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -74,7 +73,7 @@ export const ZoneControlPanel: React.FC = () => {
         <CardContent>
           <div className='text-center py-8'>
             <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto'></div>
-            <p className='text-gray-500 mt-2'>Loading zones...</p>
+            <p className='text-secondary-foreground mt-2'>Loading zones...</p>
           </div>
         </CardContent>
       </Card>
@@ -91,9 +90,9 @@ export const ZoneControlPanel: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Alert className='border-red-200 bg-red-50'>
-            <AlertTriangle className='h-4 w-4 text-red-600' />
-            <AlertDescription className='text-red-700'>
+          <Alert className='border-ring/30 bg-ring'>
+            <AlertTriangle className='h-4 w-4 text-foreground' />
+            <AlertDescription className='text-secondary-foreground'>
               Failed to load zones: {(error as Error).message}
             </AlertDescription>
           </Alert>
@@ -103,23 +102,20 @@ export const ZoneControlPanel: React.FC = () => {
   }
 
   return (
-    <Card>
+    <Card className='bg-background'>
       <CardHeader>
         <div className='flex justify-between items-start'>
           <div>
-            <CardTitle className='flex items-center gap-2'>
-              <MapPin className='w-5 h-5' />
-              Zone Control
-            </CardTitle>
+            <CardTitle className='flex items-center'>Zone Control</CardTitle>
             <CardDescription>Open and close parking zones</CardDescription>
           </div>
-          <button
+          <Button
             onClick={() => refetch()}
-            className='p-2 text-gray-500 hover:text-gray-700 transition-colors'
+            variant='outline'
             title='Refresh data'
           >
             <RefreshCw className='w-4 h-4' />
-          </button>
+          </Button>
         </div>
       </CardHeader>
 
@@ -150,11 +146,13 @@ export const ZoneControlPanel: React.FC = () => {
               return (
                 <div
                   key={zone.zoneId}
-                  className='flex justify-between items-center p-4 border rounded-lg bg-gray-50'
+                  className='flex justify-between items-center p-4 border rounded-lg bg-background'
                 >
                   <div className='flex-1'>
                     <div className='flex items-center gap-3 mb-2'>
-                      <h3 className='font-medium text-gray-900'>{zone.name}</h3>
+                      <h3 className='font-medium text-accent-foreground'>
+                        {zone.name}
+                      </h3>
                       <Badge
                         variant={zone.open ? "default" : "destructive"}
                         className={
@@ -165,7 +163,7 @@ export const ZoneControlPanel: React.FC = () => {
                       </Badge>
                     </div>
 
-                    <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600'>
+                    <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-foreground'>
                       <div>
                         <span className='font-medium'>Total:</span>{" "}
                         {zone.totalSlots}
@@ -212,8 +210,8 @@ export const ZoneControlPanel: React.FC = () => {
           </div>
         ) : (
           <div className='text-center py-8'>
-            <MapPin className='w-12 h-12 text-gray-400 mx-auto mb-4' />
-            <p className='text-gray-500'>No zones found</p>
+            <MapPin className='w-12 h-12 bg-background shadow-xs hover:bg-accent hover:text-accent-foreground mx-auto mb-4' />
+            <p className='text-foreground'>No zones found</p>
           </div>
         )}
       </CardContent>

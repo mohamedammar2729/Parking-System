@@ -35,34 +35,34 @@ export const TicketModal: React.FC<TicketModalProps> = ({
     return new Date(isoString).toLocaleString();
   };
 
-//   const handlePrint = () => {
-//     const printContent = document.getElementById("ticket-content");
-//     if (printContent) {
-//       const printWindow = window.open("", "_blank");
-//       if (printWindow) {
-//         printWindow.document.write(`
-//           <html>
-//             <head>
-//               <title>Parking Ticket - ${ticket.id}</title>
-//               <style>
-//                 body { font-family: monospace; margin: 20px; }
-//                 .ticket { border: 2px solid #000; padding: 20px; max-width: 400px; }
-//                 .header { text-align: center; font-weight: bold; margin-bottom: 20px; }
-//                 .row { display: flex; justify-content: space-between; margin: 10px 0; }
-//                 .label { font-weight: bold; }
-//                 hr { margin: 15px 0; }
-//               </style>
-//             </head>
-//             <body>
-//               ${printContent.innerHTML}
-//             </body>
-//           </html>
-//         `);
-//         printWindow.document.close();
-//         printWindow.print();
-//       }
-//     }
-//   };
+  const handlePrint = () => {
+    const printContent = document.getElementById("ticket-content");
+    if (printContent) {
+      const printWindow = window.open("", "_blank");
+      if (printWindow) {
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Parking Ticket - ${ticket.id}</title>
+              <style>
+                body { font-family: monospace; margin: 20px; }
+                .ticket { border: 2px solid #000; padding: 20px; max-width: 400px; }
+                .header { text-align: center; font-weight: bold; margin-bottom: 20px; }
+                .row { display: flex; justify-content: space-between; margin: 10px 0; }
+                .label { font-weight: bold; }
+                hr { margin: 15px 0; }
+              </style>
+            </head>
+            <body>
+              ${printContent.innerHTML}
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+      }
+    }
+  };
 
   const handleDownload = () => {
     const ticketData = {
@@ -151,7 +151,7 @@ export const TicketModal: React.FC<TicketModalProps> = ({
 
         {/* Actions */}
         <div className='flex gap-2'>
-          <Button variant='outline' className='flex-1'>
+          <Button onClick={handlePrint} variant='outline' className='flex-1'>
             <Printer className='h-4 w-4 mr-2' />
             Print
           </Button>

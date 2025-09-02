@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Card,
   CardContent,
@@ -101,6 +101,7 @@ export const CategoryRatesPanel: React.FC = () => {
     }
   };
 
+
   const resetEditForm = () => {
     setEditingCategory(null);
     setEditForm({ rateNormal: "", rateSpecial: "" });
@@ -120,7 +121,7 @@ export const CategoryRatesPanel: React.FC = () => {
         <CardContent>
           <div className='text-center py-8'>
             <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto'></div>
-            <p className='text-gray-500 mt-2'>Loading categories...</p>
+            <p className='text-foreground mt-2'>Loading categories...</p>
           </div>
         </CardContent>
       </Card>
@@ -149,17 +150,14 @@ export const CategoryRatesPanel: React.FC = () => {
   }
 
   return (
-    <Card className='shadow-sm border-slate-200 bg-white/80 backdrop-blur-sm'>
-      <CardHeader className='bg-gradient-to-r from-slate-50 to-blue-50/30 border-b border-slate-200'>
+    <Card className='shadow-sm bg-background'>
+      <CardHeader className='bg-background border-b'>
         <div className='flex justify-between items-start'>
           <div className='space-y-1'>
-            <CardTitle className='flex items-center gap-3 text-xl font-semibold text-slate-900'>
-              <div className='p-2 bg-blue-100 rounded-lg'>
-                <Settings className='w-5 h-5 text-blue-600' />
-              </div>
+            <CardTitle className='flex items-center text-xl font-semibold text-accent-foreground'>
               Category Rates Management
             </CardTitle>
-            <CardDescription className='text-slate-600'>
+            <CardDescription className='text-foreground/80'>
               Configure parking rates for different vehicle categories
             </CardDescription>
           </div>
@@ -167,7 +165,7 @@ export const CategoryRatesPanel: React.FC = () => {
             onClick={() => refetch()}
             variant='outline'
             size='sm'
-            className='gap-2 border-slate-300 hover:bg-slate-50'
+            className='gap-2'
           >
             <RefreshCw className='w-4 h-4' />
             Refresh
@@ -181,16 +179,16 @@ export const CategoryRatesPanel: React.FC = () => {
             {categories.map((category) => (
               <div
                 key={category.id}
-                className='group relative p-6 border border-slate-200 rounded-xl bg-gradient-to-r from-white to-slate-50/50 hover:shadow-md transition-all duration-200'
+                className='relative p-6 border rounded-xl bg-background hover:shadow-md'
               >
                 {/* Category Header */}
                 <div className='flex justify-between items-start mb-4'>
                   <div>
-                    <h3 className='text-lg font-semibold text-slate-900 mb-1'>
+                    <h3 className='text-lg font-semibold text-accent-foreground mb-1'>
                       {category.name}
                     </h3>
-                    <p className='text-sm text-slate-500'>
-                      Category ID: {category.id}
+                    <p className='text-sm text-foreground/80'>
+                      Category : {category.name}
                     </p>
                   </div>
 
@@ -211,7 +209,7 @@ export const CategoryRatesPanel: React.FC = () => {
                             category.rateSpecial
                           )
                         }
-                        className='gap-2 border-blue-200 hover:bg-blue-50 hover:border-blue-300 text-blue-700'
+                        className='gap-2'
                       >
                         <Edit className='w-4 h-4' />
                         Edit Rates
@@ -220,11 +218,11 @@ export const CategoryRatesPanel: React.FC = () => {
 
                     <DialogContent className='sm:max-w-lg'>
                       <DialogHeader className='pb-4'>
-                        <DialogTitle className='flex items-center gap-3 text-xl'>
-                          <div className='p-2 bg-blue-100 rounded-lg'>
-                            <Settings className='w-5 h-5 text-blue-600' />
-                          </div>
-                          Update Rates - {category.name}
+                        <DialogTitle className='text-xl'>
+                          Update Rates
+                          <p className='text-sm text-foreground/80'>
+                            Category : {category.name}
+                          </p>
                         </DialogTitle>
                       </DialogHeader>
 
@@ -236,12 +234,12 @@ export const CategoryRatesPanel: React.FC = () => {
                           <div className='space-y-2'>
                             <Label
                               htmlFor='rateNormal'
-                              className='text-sm font-medium text-slate-700'
+                              className='text-sm font-medium text-foreground'
                             >
                               Normal Rate ($/hour)
                             </Label>
                             <div className='relative'>
-                              <DollarSign className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400' />
+                              <DollarSign className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground' />
                               <Input
                                 id='rateNormal'
                                 type='number'
@@ -264,12 +262,12 @@ export const CategoryRatesPanel: React.FC = () => {
                           <div className='space-y-2'>
                             <Label
                               htmlFor='rateSpecial'
-                              className='text-sm font-medium text-slate-700'
+                              className='text-sm font-medium text-foreground'
                             >
                               Special Rate ($/hour)
                             </Label>
                             <div className='relative'>
-                              <DollarSign className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400' />
+                              <DollarSign className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground' />
                               <Input
                                 id='rateSpecial'
                                 type='number'
@@ -314,7 +312,7 @@ export const CategoryRatesPanel: React.FC = () => {
                             disabled={
                               updateCategoryMutation.isPending || editSuccess
                             }
-                            className='flex-1 bg-blue-600 hover:bg-blue-700'
+                            className='flex-1 bg-primary/80 hover:bg-primary'
                           >
                             {updateCategoryMutation.isPending
                               ? "Updating..."
@@ -325,7 +323,7 @@ export const CategoryRatesPanel: React.FC = () => {
                             variant='outline'
                             onClick={resetEditForm}
                             disabled={updateCategoryMutation.isPending}
-                            className='border-slate-300 hover:bg-slate-50'
+                            
                           >
                             Cancel
                           </Button>
@@ -365,22 +363,6 @@ export const CategoryRatesPanel: React.FC = () => {
                         /hour
                       </span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Rate Difference Indicator */}
-                <div className='mt-4 pt-4 border-t border-slate-200'>
-                  <div className='flex items-center justify-between text-xs text-slate-500'>
-                    <span>Rate Difference:</span>
-                    <span className='font-medium'>
-                      $
-                      {Math.abs(
-                        category.rateSpecial - category.rateNormal
-                      ).toFixed(2)}
-                      {category.rateSpecial > category.rateNormal
-                        ? " premium"
-                        : " discount"}
-                    </span>
                   </div>
                 </div>
               </div>

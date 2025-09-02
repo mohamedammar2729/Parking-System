@@ -88,10 +88,7 @@ export const VacationsPanel: React.FC = () => {
       <CardHeader>
         <div className='flex justify-between items-start'>
           <div>
-            <CardTitle className='flex items-center gap-2'>
-              <Calendar className='w-5 h-5' />
-              Vacation Periods Management
-            </CardTitle>
+            <CardTitle>Vacation Periods Management</CardTitle>
             <CardDescription>
               Add vacation periods when special rates apply
             </CardDescription>
@@ -112,15 +109,14 @@ export const VacationsPanel: React.FC = () => {
             </DialogTrigger>
             <DialogContent className='sm:max-w-md'>
               <DialogHeader>
-                <DialogTitle className='flex items-center gap-2'>
-                  <Calendar className='w-5 h-5' />
-                  Add Vacation Period
-                </DialogTitle>
+                <DialogTitle>Add Vacation Period</DialogTitle>
               </DialogHeader>
 
               <form onSubmit={handleCreateVacation} className='space-y-4'>
                 <div>
-                  <Label htmlFor='name'>Vacation Name</Label>
+                  <Label className='mb-2' htmlFor='name'>
+                    Vacation Name
+                  </Label>
                   <Input
                     id='name'
                     value={createForm.name}
@@ -136,7 +132,9 @@ export const VacationsPanel: React.FC = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor='from'>Start Date</Label>
+                  <Label className='mb-2' htmlFor='from'>
+                    Start Date
+                  </Label>
                   <Input
                     id='from'
                     type='date'
@@ -153,7 +151,9 @@ export const VacationsPanel: React.FC = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor='to'>End Date</Label>
+                  <Label className='mb-2' htmlFor='to'>
+                    End Date
+                  </Label>
                   <Input
                     id='to'
                     type='date'
@@ -221,11 +221,11 @@ export const VacationsPanel: React.FC = () => {
           </p>
         </div>
 
-        <div className='mt-6 p-4 bg-green-50 border border-green-200 rounded-lg'>
-          <h4 className='font-medium text-green-900 mb-2'>
+        <div className='mt-6 p-4 bg-background border rounded-lg'>
+          <h4 className='font-medium text-accent-foreground mb-2'>
             About Vacation Periods
           </h4>
-          <ul className='text-sm text-green-700 space-y-1'>
+          <ul className='text-sm text-foreground/80 space-y-1'>
             <li>
               • Vacation periods apply special (higher) rates during holidays
             </li>
