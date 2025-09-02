@@ -4,10 +4,12 @@ import type {
   Gate,
   Zone,
   Subscription,
+  Ticket,
   CheckinRequest,
   CheckinResponse,
   CheckoutRequest,
   CheckoutResponse,
+  ParkingStateReport,
 } from "./types";
 
 export const authService = {
@@ -31,4 +33,10 @@ export const ticketService = {
     apiClient.post<CheckinResponse>("/tickets/checkin", data),
   checkout: (data: CheckoutRequest) =>
     apiClient.post<CheckoutResponse>("/tickets/checkout", data),
+  getTicketById: (id: string) => apiClient.get<Ticket>(`/tickets/${id}`),
+};
+
+export const adminService = {
+  getParkingState: () =>
+    apiClient.get<ParkingStateReport[]>("/admin/reports/parking-state"),
 };

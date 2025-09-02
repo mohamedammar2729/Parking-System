@@ -56,10 +56,14 @@ export const useGateNavigation = () => {
     [router]
   );
 
+  const navigateToCheckpoint = useCallback(() => {
+    router.push("/checkpoint");
+  }, [router]);
+
   // Check current page context
   const isGatePage = pathname.includes("/gate");
   const isAdminPage = pathname.includes("/admin");
-  const isEmployeePage = pathname.includes("/employee");
+  const isCheckpointPage = pathname.includes("/checkpoint");
 
   return {
     navigateBack,
@@ -67,9 +71,10 @@ export const useGateNavigation = () => {
     navigateToEmployee,
     navigateToAdmin,
     navigateToGate,
+    navigateToCheckpoint,
     isGatePage,
     isAdminPage,
-    isEmployeePage,
+    isCheckpointPage,
     currentPath: pathname,
   };
 };

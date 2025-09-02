@@ -7,6 +7,7 @@ import {
   gateService,
   subscriptionService,
   ticketService,
+  adminService,
 } from "@/server/services";
 import { useEffect } from "react";
 import { setAuthToken } from "@/server/client";
@@ -51,6 +52,15 @@ export const useSubscription = (subscriptionId: string) => {
   });
 };
 
+export const useTicketById = (ticketId: string) => {
+  return useQuery({
+    queryKey: ["ticket", ticketId],
+    queryFn: () => ticketService.getTicketById(ticketId),
+    enabled: !!ticketId,
+    retry: false,
+  });
+};
+
 export const useCheckin = () => {
   return useMutation({
     mutationFn: (data: CheckinRequest) => ticketService.checkin(data),
@@ -60,5 +70,14 @@ export const useCheckin = () => {
 export const useCheckout = () => {
   return useMutation({
     mutationFn: (data: CheckoutRequest) => ticketService.checkout(data),
+  });
+};
+
+// Admin API hooks
+export const useParkingState = () => {
+  return useQuery({
+    queryKey: ["parking-state"],
+    queryFn: adminService.getParkingState,
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
 };
