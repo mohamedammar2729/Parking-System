@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/redux/hooks";
 import { useParkingState, useCategories } from "@/lib/api";
-import { Activity, Clock, Trash2, AlertCircle, Shield } from "lucide-react";
+import { Clock, Trash2, AlertCircle } from "lucide-react";
 
 interface AdminUpdateEvent {
   id: string;
@@ -189,18 +189,15 @@ export const AdminAuditLog: React.FC = () => {
   };
 
   return (
-    <Card className='h-full w-full shadow-sm border-slate-200'>
-      <CardHeader className='pb-2 bg-gradient-to-r from-slate-50 to-slate-100/50 border-b border-slate-200'>
+    <Card className='h-full w-full shadow-sm'>
+      <CardHeader className='pb-2 border-b'>
         <div className='flex justify-between items-center'>
           <div>
-            <CardTitle className='flex items-center gap-2 text-base font-semibold text-slate-900'>
-              <div className='p-1 bg-blue-100 rounded-md'>
-                <Activity className='w-3 h-3 text-blue-600' />
-              </div>
+            <CardTitle className='flex items-center gap-2 text-base font-semibold text-foreground'>
               Admin Audit Log
             </CardTitle>
-            <CardDescription className='text-xs text-slate-600 mt-0.5'>
-              Last {adminUpdates.length} of 50 events
+            <CardDescription className='text-xs text-foreground/80 mt-0.5'>
+              Last {adminUpdates.length} of 5 events
             </CardDescription>
           </div>
           {adminUpdates.length > 0 && (
@@ -208,7 +205,7 @@ export const AdminAuditLog: React.FC = () => {
               variant='outline'
               size='sm'
               onClick={clearLog}
-              className='gap-1 border-slate-300 hover:bg-slate-50 text-xs h-7 px-2'
+              className='gap-1 text-xs h-7 px-2'
             >
               <Trash2 className='w-3 h-3' />
               Clear
@@ -244,19 +241,19 @@ export const AdminAuditLog: React.FC = () => {
                             </Badge>
                           </div>
 
-                          <div className='text-xs text-slate-500 whitespace-nowrap flex items-center gap-0.5'>
+                          <div className='text-xs text-foreground whitespace-nowrap flex items-center gap-0.5'>
                             <Clock className='w-2.5 h-2.5' />
                             {formatTimestamp(update.timestamp)}
                           </div>
                         </div>
 
                         {/* Title */}
-                        <h4 className='font-medium text-slate-900 leading-tight text-xs mb-1'>
+                        <h4 className='font-medium text-foreground leading-tight text-xs mb-1'>
                           {details.title}
                         </h4>
 
                         {/* Description */}
-                        <p className='text-xs text-slate-700 leading-tight'>
+                        <p className='text-xs text-foreground/80 leading-tight'>
                           {details.description}
                         </p>
                       </div>
@@ -267,21 +264,17 @@ export const AdminAuditLog: React.FC = () => {
             </div>
           ) : (
             <div className='flex flex-col items-center justify-center h-full text-center p-4 space-y-2'>
-              <div className='p-2 bg-slate-100 rounded-full'>
-                <AlertCircle className='w-5 h-5 text-slate-400' />
+              <div className='p-2 bg-accent rounded-full'>
+                <AlertCircle className='w-5 h-5' />
               </div>
               <div className='space-y-1'>
-                <h3 className='text-sm font-semibold text-slate-900'>
+                <h3 className='text-sm font-semibold text-foreground'>
                   No Activity Yet
                 </h3>
-                <p className='text-slate-500 text-xs max-w-xs leading-relaxed'>
+                <p className='text-foreground/80 text-xs max-w-xs leading-relaxed'>
                   Admin actions will appear here in real-time.
                 </p>
-              </div>
-              <div className='flex items-center gap-1 text-xs text-slate-400 bg-slate-50 px-2 py-1 rounded'>
-                <Shield className='w-3 h-3' />
-                Connected
-              </div>
+              </div>              
             </div>
           )}
         </ScrollArea>

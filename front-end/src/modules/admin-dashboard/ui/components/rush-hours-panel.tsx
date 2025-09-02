@@ -107,10 +107,7 @@ export const RushHoursPanel: React.FC = () => {
       <CardHeader>
         <div className='flex justify-between items-start'>
           <div>
-            <CardTitle className='flex items-center gap-2'>
-              <Clock className='w-5 h-5' />
-              Rush Hours Management
-            </CardTitle>
+            <CardTitle>Rush Hours Management</CardTitle>
             <CardDescription>
               Add rush hour windows when special rates apply
             </CardDescription>
@@ -131,15 +128,14 @@ export const RushHoursPanel: React.FC = () => {
             </DialogTrigger>
             <DialogContent className='sm:max-w-md'>
               <DialogHeader>
-                <DialogTitle className='flex items-center gap-2'>
-                  <Clock className='w-5 h-5' />
-                  Add Rush Hour Window
-                </DialogTitle>
+                <DialogTitle>Add Rush Hour Window</DialogTitle>
               </DialogHeader>
 
               <form onSubmit={handleCreateRushHour} className='space-y-4'>
                 <div>
-                  <Label htmlFor='weekDay'>Day of Week</Label>
+                  <Label className='mb-2' htmlFor='weekDay'>
+                    Day of Week
+                  </Label>
                   <Select
                     value={createForm.weekDay}
                     onValueChange={(value) =>
@@ -163,7 +159,9 @@ export const RushHoursPanel: React.FC = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor='from'>Start Time (24-hour format)</Label>
+                  <Label className='mb-2' htmlFor='from'>
+                    Start Time (24-hour format)
+                  </Label>
                   <Input
                     id='from'
                     type='time'
@@ -177,13 +175,15 @@ export const RushHoursPanel: React.FC = () => {
                     placeholder='HH:MM'
                     required
                   />
-                  <p className='text-xs text-gray-500 mt-1'>
+                  <p className='text-xs text-foreground/80 mt-1'>
                     Format: HH:MM (e.g., 08:00)
                   </p>
                 </div>
 
                 <div>
-                  <Label htmlFor='to'>End Time (24-hour format)</Label>
+                  <Label className='mb-2' htmlFor='to'>
+                    End Time (24-hour format)
+                  </Label>
                   <Input
                     id='to'
                     type='time'
@@ -194,7 +194,7 @@ export const RushHoursPanel: React.FC = () => {
                     placeholder='HH:MM'
                     required
                   />
-                  <p className='text-xs text-gray-500 mt-1'>
+                  <p className='text-xs text-foreground/80 mt-1'>
                     Format: HH:MM (e.g., 18:00)
                   </p>
                 </div>
@@ -244,19 +244,21 @@ export const RushHoursPanel: React.FC = () => {
 
       <CardContent>
         <div className='text-center py-8'>
-          <Clock className='w-12 h-12 text-gray-400 mx-auto mb-4' />
-          <p className='text-gray-500 mb-4'>
+          <Clock className='w-12 h-12 text-foreground mx-auto mb-4' />
+          <p className='text-accent-foreground mb-1'>
             Rush hours will be displayed here after creation
           </p>
-          <p className='text-sm text-gray-400'>
+          <p className='text-sm text-foreground/70'>
             During rush hours, special rates will be applied to all parking
             categories
           </p>
         </div>
 
-        <div className='mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg'>
-          <h4 className='font-medium text-blue-900 mb-2'>About Rush Hours</h4>
-          <ul className='text-sm text-blue-700 space-y-1'>
+        <div className='mt-6 p-4 bg-background border rounded-lg'>
+          <h4 className='font-medium text-accent-foreground mb-2'>
+            About Rush Hours
+          </h4>
+          <ul className='text-sm text-foreground/80 space-y-1'>
             <li>
               • Rush hours apply special (higher) rates during busy periods
             </li>
