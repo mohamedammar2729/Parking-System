@@ -18,8 +18,14 @@ export const useGateNavigation = () => {
 
   // Navigate to home with user-specific logic
   const navigateHome = useCallback(() => {
-    router.push("/");
-  }, [router]);
+    if (
+      pathname.includes("/admin") ||
+      pathname.includes("/gate") ||
+      pathname.includes("/checkpoint")
+    ) {
+      router.push("/");
+    }
+  }, [router, pathname]);
 
   const navigateToAdmin = useCallback(() => {
     router.push("/admin");

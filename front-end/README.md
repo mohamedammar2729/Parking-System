@@ -92,37 +92,14 @@ Developed for **WeLink Cargo** as part of their comprehensive parking management
 
 ## 🛠️ Technical Stack
 
-### Frontend Framework
 
 - **Next.js 15.5.2** - React framework with app directory structure
 - **React 19.1.0** - Latest React with concurrent features
 - **TypeScript 5** - Full type safety and developer experience
-
-### State Management
-
+- **Tailwind Css** - For styling
 - **Redux Toolkit 2.8.2** - Predictable state container with modern patterns
 - **React Query 5.85.6** - Server state management and caching
 - **Custom Hooks** - Reusable logic for WebSocket and navigation
-
-### Styling & UI
-
-- **Tailwind CSS 4** - Utility-first CSS framework
-- **shadcn/ui** - Modern React component library
-- **Radix UI** - Unstyled, accessible UI primitives
-- **Lucide React** - Beautiful, customizable icons
-
-### Communication
-
-- **Axios** - HTTP client with interceptors
-- **WebSocket API** - Real-time bidirectional communication
-- **Custom WebSocket Manager** - Connection handling and reconnection logic
-
-### Development Tools
-
-- **ESLint 9** - Code linting and style enforcement
-- **Turbopack** - Fast bundler for development
-- **PostCSS** - CSS preprocessing and optimization
-
 ---
 
 ## 📁 Project Structure
@@ -240,72 +217,6 @@ Password: admin123;
 Username: employee;
 Password: emp123;
 ```
-
----
-
-## � Deployment
-
-### 📦 **Vercel Deployment (Recommended)**
-
-#### Frontend Deployment
-
-1. **Deploy to Vercel**
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy frontend
-cd front-end
-vercel --prod
-```
-
-2. **Configure Environment Variables**
-   In your Vercel dashboard, add these environment variables:
-
-```bash
-NEXT_PUBLIC_API_URL=https://your-backend-domain.vercel.app/api/v1
-NEXT_PUBLIC_WS_URL=wss://your-backend-domain.vercel.app/api/v1/ws
-```
-
-#### Backend Deployment
-
-1. **Deploy backend first**
-
-```bash
-cd back-end
-vercel --prod
-```
-
-2. **Update frontend environment variables**
-   After backend deployment, update your frontend's environment variables with the actual backend URL.
-
-### 🔧 **Environment Configuration**
-
-#### Development
-
-```bash
-# .env.local (auto-loaded by Next.js)
-NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
-NEXT_PUBLIC_WS_URL=ws://localhost:4000/api/v1/ws
-```
-
-#### Production
-
-```bash
-# Set in Vercel dashboard or .env.production
-NEXT_PUBLIC_API_URL=https://your-backend.vercel.app/api/v1
-NEXT_PUBLIC_WS_URL=wss://your-backend.vercel.app/api/v1/ws
-```
-
-### ⚙️ **Build Configuration**
-
-The project includes optimized Vercel configurations:
-
-- **Frontend**: Next.js with Turbopack for fast builds
-- **Backend**: Node.js serverless functions with WebSocket support
-- **Security**: Security headers and CORS configuration
-- **Performance**: Optimized for Vercel's Edge Network
 
 ---
 

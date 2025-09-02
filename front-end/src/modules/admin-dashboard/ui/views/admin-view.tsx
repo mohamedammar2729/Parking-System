@@ -11,10 +11,7 @@ import { RushHoursPanel } from "../components/rush-hours-panel";
 import { VacationsPanel } from "../components/vacations-panel";
 import { AdminAuditLog } from "../components/admin-audit-log";
 import { useApiToken } from "@/lib/api";
-import {
-  subscribeToGate,
-  unsubscribeFromGate,
-} from "@/web-sockets/polling-client";
+import { subscribeToGate, unsubscribeFromGate } from "@/web-sockets/client";
 import { useAppSelector } from "@/redux/hooks";
 
 const AdminView = () => {

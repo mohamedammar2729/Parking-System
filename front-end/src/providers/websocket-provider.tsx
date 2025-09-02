@@ -1,6 +1,6 @@
 "use client";
 
-import { connectWebSocket } from "@/web-sockets/polling-client";
+import { connectWebSocket } from "@/web-sockets/client";
 import { useEffect } from "react";
 
 export function WebSocketProvider({ children }: { children: React.ReactNode }) {
