@@ -205,8 +205,8 @@ export const ZoneCard: React.FC<ZoneCardProps> = ({
 
       <CardContent className='space-y-3'>
         {/* Parking Occupancy Overview */}
-        <div className='bg-gray-50 rounded-lg p-4'>
-          <h4 className='text-sm font-semibold text-gray-700 mb-3 flex items-center'>
+        <div className='bg-accent/50 rounded-lg p-4'>
+          <h4 className='text-sm font-semibold text-accent-foreground mb-3 flex items-center'>
             <Users className='h-4 w-4 mr-2' />
             Parking Overview
           </h4>
@@ -216,34 +216,36 @@ export const ZoneCard: React.FC<ZoneCardProps> = ({
               <div className='text-lg font-bold text-primary'>
                 {zone.occupied}
               </div>
-              <div className='text-xs text-muted-foreground'>Occupied</div>
+              <div className='text-xs text-accent-foreground'>Occupied</div>
             </div>
             <div className='text-center'>
-              <div className='text-lg font-bold text-accent'>{zone.free}</div>
-              <div className='text-xs text-muted-foreground'>Free</div>
+              <div className='text-lg font-bold text-foreground'>
+                {zone.free}
+              </div>
+              <div className='text-xs text-accent-foreground'>Free</div>
             </div>
             <div className='text-center'>
-              <div className='text-lg font-bold text-destructive'>
+              <div className='text-lg font-bold text-primary'>
                 {zone.reserved}
               </div>
-              <div className='text-xs text-muted-foreground'>Reserved</div>
+              <div className='text-xs text-accent-foreground'>Reserved</div>
             </div>
           </div>
 
           {/* Occupancy Bar */}
-          <div className='w-full bg-gray-200 rounded-full h-2 mb-2'>
+          <div className='w-full bg-input rounded-full h-2 mb-2'>
             <div
               className='bg-primary h-2 rounded-full relative'
               style={{ width: `${(zone.occupied / zone.totalSlots) * 100}%` }}
             >
               <div
-                className='bg-destructive h-2 rounded-full absolute right-0'
+                className='bg-popover h-2 rounded-full absolute right-0'
                 style={{ width: `${(zone.reserved / zone.occupied) * 100}%` }}
               />
             </div>
           </div>
 
-          <div className='text-center text-xs text-gray-600'>
+          <div className='text-center text-xs text-foreground'>
             Total Capacity:{" "}
             <span className='font-semibold'>{zone.totalSlots}</span> slots
           </div>
@@ -252,23 +254,22 @@ export const ZoneCard: React.FC<ZoneCardProps> = ({
         {/* Availability Section - Tab-specific */}
         <div className='rounded-lg p-4'>
           {activeTab === "visitor" ? (
-            <div className='text-center p-4 bg-white rounded-lg border'>
+            <div className='text-center p-4 bg-background rounded-lg border'>
               <div className='text-3xl font-bold text-primary mb-2'>
                 {zone.availableForVisitors}
               </div>
-              <div className='text-sm text-gray-600 font-medium mb-1'>
+              <div className='text-sm text-foreground font-medium mb-1'>
                 Available Slots for Visitors
               </div>
-              
             </div>
           ) : (
-            <div className='text-center p-4 bg-white rounded-lg border'>
-              <div className='text-3xl font-bold text-secondary mb-2'>
+            <div className='text-center p-4 bg-background rounded-lg border'>
+              <div className='text-3xl font-bold text-primary mb-2'>
                 {zone.availableForSubscribers}
               </div>
-              <div className='text-sm text-muted-foreground font-medium mb-1'>
+              <div className='text-sm text-accent-foreground font-medium mb-1'>
                 Available Slots for Subscribers
-              </div>             
+              </div>
             </div>
           )}
         </div>
@@ -276,13 +277,13 @@ export const ZoneCard: React.FC<ZoneCardProps> = ({
         {/* Pricing Information - Tab-specific */}
         {activeTab === "visitor" && (
           <div className='rounded-lg px-8'>
-            <h4 className='text-sm font-semibold text-muted-foreground mb-3 flex items-center'>
+            <h4 className='text-sm font-semibold text-foreground mb-3 flex items-center'>
               Visitor Hourly Rates
             </h4>
 
             <div className='grid grid-cols-2 gap-3'>
               <div className='text-center p-2 bg-background rounded border'>
-                <div className='text-lg font-bold text-accent'>
+                <div className='text-lg font-bold text-foreground'>
                   ${zone.rateNormal}
                 </div>
                 <div className='text-xs text-muted-foreground'>Normal Rate</div>
@@ -365,9 +366,9 @@ export const ZoneCard: React.FC<ZoneCardProps> = ({
                         id={`subscription-${zone.id}`}
                         value={subscriptionId}
                         onChange={(e) => setSubscriptionId(e.target.value)}
-                        placeholder='Enter your subscription ID (e.g., sub_001)'
+                        placeholder='Enter your subscription ID'
                         disabled={isVerifying}
-                        className='border-2 border-gray-300 focus:border-purple-500 h-11'
+                        className='border-2 h-11'
                       />
                     </div>
 

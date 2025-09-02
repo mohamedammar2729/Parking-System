@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useGateNavigation } from "@/hooks/use-gate-navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout } from "@/redux/auth/auth-slice";
-import { Home, LogOut, User, Clock } from "lucide-react";
+import { Home, LogOut, Clock } from "lucide-react";
 import { WebSocketStatus } from "@/components/connection-status";
 
 export const CheckpointHeader: React.FC = () => {
@@ -25,68 +24,63 @@ export const CheckpointHeader: React.FC = () => {
   };
 
   return (
-    <header className='bg-primary text-white py-3 shadow-lg'>
-      <div className='flex justify-between items-center max-w-7xl mx-auto px-4'>
-        {/* Navigation Buttons */}
-        <div className='flex items-center gap-3'>
+    <header className='bg-primary text-popover'>
+      <div className='flex justify-between items-center max-w-[1600px] mx-auto px-6 py-2'>
+        {/* Left Section - Logo & Navigation */}
+        <div className='flex items-center gap-6'>
+          <div className='flex items-center gap-3'>
+            <div>
+              <h1 className='text-xl font-bold text-popover'>
+                Checkpoint Dashboard
+              </h1>
+              <p className='text-xs text-popover'>Parking Management System</p>
+            </div>
+          </div>
+
           <Button
             onClick={navigateHome}
-            variant='outline'
-            size='lg'
-            className='bg-white/10 hover:bg-white/20 border-white/30 text-white hover:text-white transition-all duration-200 backdrop-blur-sm'
+            variant='secondary'
+            size='sm'
+            className='transition-all duration-200'
           >
-            <Home className='w-5 h-5 mr-2' />
+            <Home className='w-4 h-4 mr-2' />
             Home
           </Button>
         </div>
 
-        {/* Checkpoint Information */}
-        <div className='flex items-center gap-4'>
-          <div className='flex items-center gap-2'>
-            <User className='w-5 h-5 text-blue-200' />
-            <Badge
-              variant='secondary'
-              className='text-lg px-3 py-1 font-semibold bg-green-500/20 text-green-200 border-green-300/30'
-            >
-              Checkpoint Station
-            </Badge>
-          </div>
-
-          <div className='h-8 w-px bg-white/30'></div>
-
-          <div className='text-center'>
-            <p className='text-blue-200 text-sm'>Employee</p>
-            <p className='text-lg font-semibold'>
-              {user?.username || "Unknown"}
+        {/* Right Section - User Info & Controls */}
+        <div className='flex items-center gap-6'>
+          {/* Time Display */}
+          <div className='text-right'>
+            <div className='flex items-center gap-2 text-popover text-xs'>
+              <Clock className='w-3 h-3' />
+              <span>Current Time</span>
+            </div>
+            <p className='text-lg font-mono font-bold text-popover'>
+              {currentTime}
             </p>
           </div>
 
-          <div className='h-8 w-px bg-white/30'></div>
-
-          <div className='text-right'>
-            <div className='flex items-center gap-2 text-blue-200 text-sm'>
-              <Clock className='w-4 h-4' />
-              <span>Current Time</span>
-            </div>
-            <p className='text-xl font-mono font-bold'>{currentTime}</p>
-          </div>
-
-          <div className='h-8 w-px bg-white/30'></div>
-
+          {/* Connection Status */}
           <WebSocketStatus />
-        </div>
 
-        {/* Logout Button */}
-        <div>
+          {/* Logout Button */}
           <Button
             onClick={handleLogout}
-            variant='outline'
-            size='lg'
-            className='bg-red-500/10 hover:bg-red-500/20 border-red-300/30 text-red-200 hover:text-red-100 transition-all duration-200 backdrop-blur-sm'
+            variant='destructive'
+            size='sm'
+            className='bg-chart-1'
           >
-            <LogOut className='w-5 h-5 mr-2' />
+            <LogOut className='w-4 h-4 mr-2' />
             Logout
           </Button>
+
+          {/* User Info */}
+          <div className='text-right'>
+            <p className='font-semibold text-popover'>
+              {`Welcome ${user?.username || "Employee"}`}
+            </p>
+          </div>
         </div>
       </div>
     </header>

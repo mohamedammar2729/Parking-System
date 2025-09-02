@@ -89,44 +89,10 @@ export const GateView: React.FC<GateViewProps> = ({ gateId }) => {
   }
 
   return (
-    <div className='min-h-screen bg-gray-50 pb-20'>
+    <div className='min-h-screen bg-background pb-20'>
       <GateHeader gateId={gateId} />
 
       <div className='container mx-auto px-4 py-8'>
-        {/* Information Banner - Tab-specific */}
-        <div className='p-4 mb-8'>
-          <div className='flex items-start gap-3'>
-            <div
-              className={`rounded-full p-2 ${
-                activeTab === "visitor" ? "bg-primary" : "bg-secondary"
-              }`}
-            >
-              <Users className='h-5 w-5 text-white' />
-            </div>
-            <div>
-              <h3 className='font-semibold text-primary mb-1'>
-                Welcome to {gateId.replace("gate_", "Gate ")} -{" "}
-                {activeTab === "visitor" ? "Visitor" : "Subscriber"} Check-in
-              </h3>
-              {activeTab === "visitor" ? (
-                <p className='text-primary/80 text-sm'>
-                  <strong>Visitor Parking:</strong> Pay-per-use parking with
-                  hourly rates. Select an available zone below to begin your
-                  parking session. Normal and special rates apply based on
-                  current time periods.
-                </p>
-              ) : (
-                <p className='text-secondary text-sm'>
-                  <strong>Subscriber Access:</strong> Access zones matching your
-                  subscription category. Enter your subscription ID to verify
-                  eligibility and access your designated zones. Subscription
-                  benefits include reserved slot allocation.
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-
         <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
 
         <ZoneList
