@@ -104,7 +104,7 @@ const HomeView = () => {
                 className='w-full bg-transparent'
                 size='lg'
               >
-                <Link href='/employee'>Employee Access</Link>
+                <Link href='/checkpoint'>Employee Access</Link>
               </Button>
             </CardContent>
           </Card>
