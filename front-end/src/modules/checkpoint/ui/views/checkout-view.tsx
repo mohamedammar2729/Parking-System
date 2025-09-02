@@ -111,9 +111,9 @@ export const CheckoutView: React.FC = () => {
     if (ticket?.type !== "subscriber") return null;
 
     return (
-      <Card className='mt-4 border-blue-200 bg-blue-50'>
+      <Card className='mt-4 bg-accent/70'>
         <CardHeader>
-          <CardTitle className='text-blue-700 flex items-center gap-2'>
+          <CardTitle className='text-foreground flex items-center gap-2'>
             <User className='w-5 h-5' />
             Subscription Verification Required
           </CardTitle>
@@ -141,19 +141,19 @@ export const CheckoutView: React.FC = () => {
             </div>
 
             {subscription && (
-              <div className='mt-4 p-4 bg-white rounded-lg border border-blue-200'>
-                <h4 className='font-semibold text-gray-900 mb-3'>
+              <div className='mt-4 p-4 bg-background rounded-lg border'>
+                <h4 className='font-semibold text-accent-foreground mb-3'>
                   Subscription Details
                 </h4>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-sm'>
                   <div>
-                    <p className='font-medium text-gray-700 mb-1'>
+                    <p className='font-medium text-foreground mb-1'>
                       Subscription ID:
                     </p>
-                    <p className='font-mono text-gray-900'>{subscription.id}</p>
+                    <p className='font-mono text-accent-foreground'>{subscription.id}</p>
                   </div>
                   <div>
-                    <p className='font-medium text-gray-700 mb-1'>Status:</p>
+                    <p className='font-medium text-foreground mb-1'>Status:</p>
                     <Badge
                       variant={subscription.active ? "default" : "destructive"}
                     >
@@ -161,11 +161,11 @@ export const CheckoutView: React.FC = () => {
                     </Badge>
                   </div>
                   <div>
-                    <p className='font-medium text-gray-700 mb-1'>Category:</p>
-                    <p className='text-gray-900'>{subscription.category}</p>
+                    <p className='font-medium text-foreground mb-1'>Category:</p>
+                    <p className='text-accent-foreground'>{subscription.category}</p>
                   </div>
                   <div>
-                    <p className='font-medium text-gray-700 mb-1'>
+                    <p className='font-medium text-foreground mb-1'>
                       Registered License Plates:
                     </p>
                     <div className='flex flex-wrap gap-1'>
@@ -174,13 +174,13 @@ export const CheckoutView: React.FC = () => {
                           <Badge
                             key={index}
                             variant='outline'
-                            className='font-mono text-gray-900 bg-white'
+                            className='font-mono text-accent-foreground bg-background'
                           >
                             {car.plate}
                           </Badge>
                         ))
                       ) : (
-                        <span className='text-gray-500 text-sm'>
+                        <span className='text-foreground text-sm'>
                           No plates registered
                         </span>
                       )}

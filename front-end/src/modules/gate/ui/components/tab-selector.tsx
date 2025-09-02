@@ -20,7 +20,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
         value={activeTab}
         onValueChange={(value) => onTabChange(value as TabType)}
       >
-        <TabsList className='grid w-full max-w-lg mx-auto grid-cols-2 h-14 p-1 bg-gray-100'>
+        <TabsList className='grid w-full max-w-lg mx-auto grid-cols-2 h-14 p-1 bg-background'>
           <TabsTrigger
             value='visitor'
             className='flex items-center gap-3 h-12 text-base font-medium data-[state=active]:bg-primary data-[state=active]:text-white'
@@ -30,7 +30,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
           </TabsTrigger>
           <TabsTrigger
             value='subscriber'
-            className='flex items-center gap-3 h-12 text-base font-medium data-[state=active]:bg-secondary data-[state=active]:text-white'
+            className='flex items-center gap-3 h-12 text-base font-medium data-[state=active]:bg-foreground data-[state=active]:text-white'
           >
             <UserCheck className='h-5 w-5' />
             <div className='text-left'>Subscriber</div>

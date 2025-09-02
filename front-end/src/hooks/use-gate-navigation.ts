@@ -9,37 +9,23 @@ export const useGateNavigation = () => {
 
   // Navigate back with intelligent fallback
   const navigateBack = useCallback(() => {
-    // If we're in a gate page, try to go back
     if (typeof window !== "undefined" && window.history.length > 1) {
       router.back();
     } else {
-      // Fallback to employee page or home
-      if (pathname.includes("/gate")) {
-        router.push("/employee");
-      } else {
-        router.push("/");
-      }
+      router.push("/");
     }
-  }, [router, pathname]);
+  }, [router]);
 
   // Navigate to home with user-specific logic
   const navigateHome = useCallback(() => {
-    // Determine appropriate home based on current context
-    if (pathname.includes("/admin")) {
-      router.push("/admin");
-    } else if (pathname.includes("/employee")) {
-      router.push("/employee");
-    } else if (pathname.includes("/gate")) {
-      router.push("/employee"); // Gates are typically accessed by employees
-    } else {
+    if (
+      pathname.includes("/admin") ||
+      pathname.includes("/gate") ||
+      pathname.includes("/checkpoint")
+    ) {
       router.push("/");
     }
   }, [router, pathname]);
-
-  // Quick access to specific sections
-  const navigateToEmployee = useCallback(() => {
-    router.push("/employee");
-  }, [router]);
 
   const navigateToAdmin = useCallback(() => {
     router.push("/admin");
@@ -68,7 +54,6 @@ export const useGateNavigation = () => {
   return {
     navigateBack,
     navigateHome,
-    navigateToEmployee,
     navigateToAdmin,
     navigateToGate,
     navigateToCheckpoint,

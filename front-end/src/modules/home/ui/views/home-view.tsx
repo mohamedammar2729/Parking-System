@@ -111,7 +111,7 @@ const HomeView = () => {
 
           <Card className='group hover:shadow-xl transition-all duration-300 '>
             <CardHeader className='text-center pb-4'>
-              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-chart-4/10 group-hover:bg-chart-4 group-hover:text-white transition-colors'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-foreground/20 group-hover:bg-foreground group-hover:text-white transition-colors'>
                 <Settings className='h-8 w-8' />
               </div>
               <CardTitle className='text-xl'>Admin Dashboard</CardTitle>

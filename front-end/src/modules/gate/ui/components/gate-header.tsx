@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useGateNavigation } from "@/hooks/use-gate-navigation";
-import { ArrowLeft, Home, MapPin } from "lucide-react";
+import { ArrowLeft, Home, Clock } from "lucide-react";
 import { WebSocketStatus } from "@/components/connection-status";
 
 interface GateHeaderProps {
@@ -24,64 +23,56 @@ export const GateHeader: React.FC<GateHeaderProps> = ({ gateId }) => {
   const displayGateId = isSelectionPage
     ? "Gate Selection"
     : `Gate ${gateId.replace("gate_", "")}`;
+
   return (
-    <header className='bg-primary text-white py-2 shadow-lg'>
-      <div className='flex justify-between items-center max-w-7xl mx-auto'>
-        {/* Navigation Buttons */}
-        <div className='flex items-center gap-3'>
+    <header className='bg-primary text-popover'>
+      <div className='flex justify-between items-center max-w-[1600px] mx-auto px-6 py-2'>
+        {/* Left Section - Logo & Navigation */}
+        <div className='flex items-center gap-6'>
+          <div className='flex items-center gap-3'>
+            <div>
+              <h1 className='text-xl font-bold text-popover'>
+                {displayGateId}
+              </h1>
+              <p className='text-xs text-popover'>Parking Management System</p>
+            </div>
+          </div>
+
           <Button
             onClick={navigateBack}
-            variant='outline'
-            size='lg'
-            className='bg-white/10 hover:bg-white/20 border-white/30 text-white hover:text-white transition-all duration-200 backdrop-blur-sm'
+            variant='secondary'
+            size='sm'
+            className='transition-all duration-200'
           >
-            <ArrowLeft className='w-5 h-5 mr-2' />
+            <ArrowLeft className='w-4 h-4 mr-2' />
             Back
           </Button>
 
           <Button
             onClick={navigateHome}
-            variant='outline'
-            size='lg'
-            className='bg-white/10 hover:bg-white/20 border-white/30 text-white hover:text-white transition-all duration-200 backdrop-blur-sm'
+            variant='secondary'
+            size='sm'
+            className='transition-all duration-200'
           >
-            <Home className='w-5 h-5 mr-2' />
+            <Home className='w-4 h-4 mr-2' />
             Home
           </Button>
         </div>
 
-        {/* Gate Information */}
-        <div className='flex items-center gap-4'>
-          {/* <div className='flex items-center gap-2'>
-            <Car className='w-6 h-6 text-blue-200' />
-            <div className='text-right'>
-              <h1 className='text-xl font-bold'>Parking Gate</h1>
-              
-            </div>
-          </div>
-
-          <div className='h-8 w-px bg-white/30'></div> */}
-
-          <div className='flex items-center gap-2'>
-            <MapPin className='w-5 h-5 text-blue-200' />
-            <Badge
-              variant='secondary'
-              className={`text-lg px-3 py-1 font-semibold ${
-                isSelectionPage
-                  ? "bg-green-500/20 text-green-200 border-green-300/30"
-                  : "bg-white/20 text-white border-white/30"
-              }`}
-            >
-              {displayGateId}
-            </Badge>
-          </div>
-
-          <div className='h-8 w-px bg-white/30'></div>
-
+        {/* Right Section - Time & Controls */}
+        <div className='flex items-center gap-6'>
+          {/* Time Display */}
           <div className='text-right'>
-            <p className='text-blue-200 text-sm'>Current Time</p>
-            <p className='text-xl font-mono font-bold'>{currentTime}</p>
+            <div className='flex items-center gap-2 text-popover text-xs'>
+              <Clock className='w-3 h-3' />
+              <span>Current Time</span>
+            </div>
+            <p className='text-lg font-mono font-bold text-popover'>
+              {currentTime}
+            </p>
           </div>
+
+          {/* Connection Status */}
           <WebSocketStatus />
         </div>
       </div>
